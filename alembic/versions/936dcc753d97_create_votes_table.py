@@ -19,7 +19,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.create_primary_key('primarykey_blogs', 'blogs', ['blog_id'])
+    # op.create_primary_key('primarykey_blogs', 'blogs', ['blog_id'])
     op.create_table(
         "votes",
         sa.Column("post_id",sa.Integer(),sa.ForeignKey('blogs.blog_id',ondelete='CASCADE'),primary_key=True,nullable=False),
@@ -28,5 +28,5 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_constraint("primarykey_blogs")
+    # op.drop_constraint("primarykey_blogs")
     op.drop_table("votes")

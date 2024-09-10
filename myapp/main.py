@@ -37,7 +37,7 @@ app.include_router(vote.router)
 
 @app.get("/")
 def root():
-    return "newww"
+    return "Hey guys this is Pranav testing out FastApi by developing a simple Blog API. I tested methods like GET, POST , PUT and DELETE "
 #practice
 @app.get("/sqlalchemy")
 def test(db:Session=Depends(get_db)):

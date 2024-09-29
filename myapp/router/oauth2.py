@@ -24,7 +24,9 @@ def jwt_token(data:dict):
 def validate_token(token:str,output_exception):
     #logic for validating token
     try:
+        
         data=jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM]) #here algorithm is in plural so pass an array
+       
         user_id:int=data.get("user_id")
         if not user_id:
             raise output_exception

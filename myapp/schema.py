@@ -22,6 +22,7 @@ class Response(BaseModel):
     owner:credentials
 
     class Config:
+        extra="forbid"
         orm_mode=True
 
 
@@ -31,6 +32,7 @@ class signresponse(BaseModel):
     
     
     class Config:
+        extra="forbid"
         orm_mode=True
 
 class voteinput(BaseModel):

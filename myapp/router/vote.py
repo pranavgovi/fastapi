@@ -53,6 +53,7 @@ def vote(db:Session=Depends(get_db),user_id=Depends(oauth2.getCurrentUser),votei
             db.delete(postquery.first())
             db.commit()
             post=db.query(models.Blogs).filter(models.Blogs.blog_id==voteinput.post_id).first()
+            prev_votes=0
             if post.votes:
                 prev_votes=int(post.votes)
           

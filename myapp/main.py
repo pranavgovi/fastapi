@@ -12,6 +12,7 @@ from .database import get_db
 from . import schema,utils
 from .router import authentication,blog,vote
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.testclient import TestClient
 # models.Base.metadata.create_all(bind=engine)
 app=FastAPI()
 
@@ -37,7 +38,7 @@ app.include_router(vote.router)
 
 @app.get("/")
 def root():
-    return "Hey guys this is Pranav testing out FastApi by developing a simple Blog API. I tested methods like GET, POST , PUT and DELETE "
+    return {"message":"Hey guys this is Pranav testing out FastApi by developing a simple Blog API. Along with this url , add /docs to test out the CRUD operations "}
 #practice
 @app.get("/sqlalchemy")
 def test(db:Session=Depends(get_db)):

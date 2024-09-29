@@ -21,7 +21,7 @@ router=APIRouter(
 
 
 #for authentication
-@router.post("/signup",response_model=str)
+@router.post("/signup")
 def signup(db:Session=Depends(get_db),userinfo:OAuth2PasswordRequestForm=Depends()):
     if db.query(models.Authentication).filter(models.Authentication.email==userinfo.username).first():
         return "This email already has an account"
@@ -31,18 +31,28 @@ def signup(db:Session=Depends(get_db),userinfo:OAuth2PasswordRequestForm=Depends
 
     db.commit()
     db.refresh(entry)
-    return "Account created successfully for {}".format(entry.email)
+    return entry
 
 @router.post("/login",response_model=dict)
 def login(db:Session=Depends(get_db),userinfo:OAuth2PasswordRequestForm=Depends()):
     query=db.query(models.Authentication).filter(models.Authentication.email==userinfo.username)
     db_data=query.first()
+    if not userinfo.username:
+        #empty username
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, 
+                            detail="Empty credentials")
+    if not userinfo.password:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, 
+                            detail="Empty credentials")
+
     if not db_data:
+        #if the user does not exist, raise 404
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-                            detail="Invalid credentials")
+                            detail="Username does not exist")
+    #if the password is wrong return 401
     if not utils.check(userinfo.password,db_data.password):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-                            detail="Invalid credentials")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, 
+                            detail="Invalid password")
     print("user who logged in now is:",db_data.id)
     db.commit()
     db.refresh(db_data)

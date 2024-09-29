@@ -73,12 +73,15 @@ def getPosts(id:int,response:Response,db:Session=Depends(get_db),user_id=Depends
     # conn.commit()
 
     post=db.query(models.Blogs).filter(models.Blogs.blog_id==id).first()
+    print("hiiiiiiiiiiiiiiiiiiiii")
     db.commit()
+
 
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
                             detail=f"No records found for this {id} id")
     if post.user_id!=user_id and post.public!=True:
+
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, 
                             detail=f"This post is private")
     return post
